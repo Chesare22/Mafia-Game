@@ -36,6 +36,7 @@ type Msg
     = AddPlayer
     | DeletePlayer Int
     | EditPlayerName Int String
+    | StartChoosingRoles
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -61,6 +62,43 @@ update msg model =
               }
             , Cmd.none
             )
+
+        StartChoosingRoles ->
+            let
+                validPlayers : List String
+                validPlayers =
+                    model.players
+                        |> List.map String.trim
+                        |> List.filter (String.isEmpty >> not)
+
+                repeatedPlayers : List String
+                repeatedPlayers =
+                    getRepeatedElements validPlayers
+            in
+            ( model
+            , Cmd.none
+            )
+
+
+getRepeatedElements : List a -> List a
+getRepeatedElements =
+    getRepeatedElements_ []
+
+
+getRepeatedElements_ : List a -> List a -> List a
+getRepeatedElements_ repeatedSoFar list =
+    case list of
+        [] ->
+            repeatedSoFar
+
+        head :: tail ->
+            if List.member head tail then
+                getRepeatedElements_
+                    (head :: repeatedSoFar)
+                    (tail |> List.filter ((/=) head))
+
+            else
+                getRepeatedElements_ repeatedSoFar tail
 
 
 
@@ -92,7 +130,9 @@ view model =
             (List.indexedMap
                 editNameList
                 model.players
-                ++ [ button [ onClick AddPlayer ] [ text "Agregar jugador" ] ]
+                ++ [ button [ onClick AddPlayer ] [ text "Agregar jugador" ]
+                   , button [ onClick StartChoosingRoles ] [ text "Elegir Roles" ]
+                   ]
             )
         ]
 
