@@ -5,6 +5,7 @@ import Css exposing (..)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes as Attributes
 import Html.Styled.Events exposing (..)
+import List.Extra
 
 
 
@@ -12,12 +13,16 @@ import Html.Styled.Events exposing (..)
 
 
 type alias Model =
-    {}
+    { players : List String
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { players = []
+      }
+    , Cmd.none
+    )
 
 
 
@@ -25,12 +30,25 @@ init =
 
 
 type Msg
-    = NoOp
+    = AddPlayer
+    | EditPlayerName Int String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        AddPlayer ->
+            ( { model | players = model.players ++ [ "" ] }
+            , Cmd.none
+            )
+
+        EditPlayerName index name ->
+            ( { model
+                | players =
+                    model.players |> List.Extra.setAt index name
+              }
+            , Cmd.none
+            )
 
 
 
@@ -39,10 +57,41 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ img [ Attributes.src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
+    div
+        [ Attributes.css
+            [ minHeight (vh 100)
+            , maxWidth (vw 100)
+            , property "display" "grid"
+            , property "grid-template-columns" "1fr"
+            , property "justify-items" "center"
+            ]
         ]
+        [ div
+            [ Attributes.css
+                [ maxWidth (rem 20)
+                , width (pc 100)
+                , padding (rem 2)
+                , property "display" "grid"
+                , property "grid-gap" "0.75rem"
+                , property "grid-template-columns" "1fr"
+                , property "grid-template-rows" "repeat(auto-fit, 2rem)"
+                ]
+            ]
+            (List.indexedMap
+                editNameList
+                model.players
+                ++ [ button [ onClick AddPlayer ] [ text "Agregar jugador" ] ]
+            )
+        ]
+
+
+editNameList : Int -> String -> Html Msg
+editNameList index name =
+    input
+        [ Attributes.value name
+        , onInput (EditPlayerName index)
+        ]
+        []
 
 
 
