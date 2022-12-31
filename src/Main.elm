@@ -61,6 +61,7 @@ view model =
         [ Attributes.css
             [ minHeight (vh 100)
             , maxWidth (vw 100)
+            , padding (rem 2)
             , property "display" "grid"
             , property "grid-template-columns" "1fr"
             , property "justify-items" "center"
@@ -69,8 +70,7 @@ view model =
         [ div
             [ Attributes.css
                 [ maxWidth (rem 20)
-                , width (pc 100)
-                , padding (rem 2)
+                , width (pct 100)
                 , property "display" "grid"
                 , property "grid-gap" "0.75rem"
                 , property "grid-template-columns" "1fr"
