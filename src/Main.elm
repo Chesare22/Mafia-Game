@@ -6,6 +6,9 @@ import Html.Styled exposing (..)
 import Html.Styled.Attributes as Attributes
 import Html.Styled.Events exposing (..)
 import List.Extra
+import Material.Icons as Filled
+import Material.Icons.Types exposing (Coloring(..))
+import Svg.Styled
 
 
 
@@ -31,6 +34,7 @@ init =
 
 type Msg
     = AddPlayer
+    | DeletePlayer Int
     | EditPlayerName Int String
 
 
@@ -39,6 +43,14 @@ update msg model =
     case msg of
         AddPlayer ->
             ( { model | players = model.players ++ [ "" ] }
+            , Cmd.none
+            )
+
+        DeletePlayer index ->
+            ( { model
+                | players =
+                    model.players |> List.Extra.removeAt index
+              }
             , Cmd.none
             )
 
@@ -87,11 +99,23 @@ view model =
 
 editNameList : Int -> String -> Html Msg
 editNameList index name =
-    input
-        [ Attributes.value name
-        , onInput (EditPlayerName index)
+    div
+        [ Attributes.css
+            [ property "display" "grid"
+            , property "grid-gap" "0.75rem"
+            , property "grid-template-columns" "1fr auto"
+            ]
         ]
-        []
+        [ input
+            [ Attributes.value name
+            , onInput (EditPlayerName index)
+            ]
+            []
+        , button
+            [ onClick (DeletePlayer index)
+            ]
+            [ Svg.Styled.fromUnstyled <| Filled.delete 20 Inherit ]
+        ]
 
 
 
