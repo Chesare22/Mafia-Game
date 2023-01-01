@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Css exposing (..)
+import Css.Transitions exposing (transition)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes as Attributes
 import Html.Styled.Events exposing (..)
@@ -17,12 +18,14 @@ import Svg.Styled
 
 type alias Model =
     { players : List String
+    , errorMessage : Maybe String
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { players = []
+      , errorMessage = Nothing
       }
     , Cmd.none
     )
@@ -37,6 +40,8 @@ type Msg
     | DeletePlayer Int
     | EditPlayerName Int String
     | StartChoosingRoles
+    | SetErrorMessage String
+    | RemoveErrorMessage
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -79,6 +84,12 @@ update msg model =
             , Cmd.none
             )
 
+        SetErrorMessage message ->
+            ( { model | errorMessage = Just message }, Cmd.none )
+
+        RemoveErrorMessage ->
+            ( { model | errorMessage = Nothing }, Cmd.none )
+
 
 getRepeatedElements : List a -> List a
 getRepeatedElements =
@@ -112,6 +123,7 @@ view model =
             [ minHeight (vh 100)
             , maxWidth (vw 100)
             , padding (rem 2)
+            , position relative
             , property "display" "grid"
             , property "grid-template-columns" "1fr"
             , property "justify-items" "center"
@@ -134,7 +146,33 @@ view model =
                    , button [ onClick StartChoosingRoles ] [ text "Elegir Roles" ]
                    ]
             )
+        , div
+            [ Attributes.css
+                [ position absolute
+                , top (rem 2)
+                , right (rem 2)
+                , maxWidth (rem 12.5)
+                , width (pct 100)
+                , backgroundColor (hex "#B00020")
+                , padding (rem 0.5)
+                , borderRadius (px 5)
+                , color (hex "#FFFFFF")
+                , maybeToVisibility model.errorMessage
+                , transition [ Css.Transitions.opacity 800 ]
+                ]
+            ]
+            [ text (Maybe.withDefault "" model.errorMessage) ]
         ]
+
+
+maybeToVisibility : Maybe a -> Style
+maybeToVisibility maybe =
+    case maybe of
+        Just _ ->
+            opacity (num 1)
+
+        Nothing ->
+            opacity (num 0)
 
 
 editNameList : Int -> String -> Html Msg
