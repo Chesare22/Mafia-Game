@@ -1,7 +1,7 @@
 {
   "main.css": "/Mafia-Game/static/css/main.0af5c45f.chunk.css",
-  "main.js": "/Mafia-Game/static/js/main.3dc370f7.chunk.js",
-  "main.js.map": "/Mafia-Game/static/js/main.3dc370f7.chunk.js.map",
+  "main.js": "/Mafia-Game/static/js/main.64242519.chunk.js",
+  "main.js.map": "/Mafia-Game/static/js/main.64242519.chunk.js.map",
   "runtime~main.js": "/Mafia-Game/static/js/runtime~main.7842ba1f.js",
   "runtime~main.js.map": "/Mafia-Game/static/js/runtime~main.7842ba1f.js.map",
   "vendors~main.js": "/Mafia-Game/static/js/vendors~main.b17b319b.chunk.js",
@@ -11,5 +11,5 @@
   "index.html": "/Mafia-Game/index.html",
   "logo.svg": "/Mafia-Game/logo.svg",
   "manifest.json": "/Mafia-Game/manifest.json",
-  "precache-manifest.a853669f9956c2090c69bb8256943d5b.js": "/Mafia-Game/precache-manifest.a853669f9956c2090c69bb8256943d5b.js"
+  "precache-manifest.404939ca3fb69d29ae302c1c231aa8ac.js": "/Mafia-Game/precache-manifest.404939ca3fb69d29ae302c1c231aa8ac.js"
 }

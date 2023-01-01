@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Mafia-Game/favicon.ico"
   },
   {
-    "revision": "f4a5399b78ae1c4cf5df1c2d55e4fe82",
+    "revision": "dd2a8fe8d8365a2341c787317489e2aa",
     "url": "/Mafia-Game/index.html"
   },
   {
@@ -16,12 +16,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Mafia-Game/manifest.json"
   },
   {
-    "revision": "3dc370f7bb17b02dfe93",
+    "revision": "642425196e151ad8a3ed",
     "url": "/Mafia-Game/static/css/main.0af5c45f.chunk.css"
   },
   {
-    "revision": "3dc370f7bb17b02dfe93",
-    "url": "/Mafia-Game/static/js/main.3dc370f7.chunk.js"
+    "revision": "642425196e151ad8a3ed",
+    "url": "/Mafia-Game/static/js/main.64242519.chunk.js"
   },
   {
     "revision": "7842ba1fa5941a3c01b2",
