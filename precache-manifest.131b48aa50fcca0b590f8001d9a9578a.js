@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Mafia-Game/favicon.ico"
   },
   {
-    "revision": "dd2a8fe8d8365a2341c787317489e2aa",
+    "revision": "ef3d1c3eb1db33bedf0cb020c184b2ba",
     "url": "/Mafia-Game/index.html"
   },
   {
