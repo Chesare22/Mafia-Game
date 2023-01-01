@@ -3,6 +3,7 @@ module Main exposing (..)
 import Browser
 import Css exposing (..)
 import Css.Transitions exposing (transition)
+import Delay
 import Html.Styled exposing (..)
 import Html.Styled.Attributes as Attributes
 import Html.Styled.Events exposing (..)
@@ -80,9 +81,15 @@ update msg model =
                 repeatedPlayers =
                     getRepeatedElements validPlayers
             in
-            ( model
-            , Cmd.none
-            )
+            if List.isEmpty repeatedPlayers then
+                ( { model | players = validPlayers }, Cmd.none )
+
+            else
+                ( { model
+                    | errorMessage = Just ("Hay elementos repetidos: " ++ joinWithConjunction "y" repeatedPlayers)
+                  }
+                , Delay.after 3000 RemoveErrorMessage
+                )
 
         SetErrorMessage message ->
             ( { model | errorMessage = Just message }, Cmd.none )
@@ -91,9 +98,28 @@ update msg model =
             ( { model | errorMessage = Nothing }, Cmd.none )
 
 
+joinWithConjunction : String -> List String -> String
+joinWithConjunction conjunction words =
+    case List.reverse words of
+        [] ->
+            ""
+
+        [ str ] ->
+            str
+
+        lastElement :: rest ->
+            String.join " "
+                [ rest
+                    |> List.reverse
+                    |> String.join ", "
+                , conjunction
+                , lastElement
+                ]
+
+
 getRepeatedElements : List a -> List a
 getRepeatedElements =
-    getRepeatedElements_ []
+    getRepeatedElements_ [] >> List.reverse
 
 
 getRepeatedElements_ : List a -> List a -> List a
