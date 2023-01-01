@@ -17,16 +17,36 @@ import Svg.Styled
 ---- MODEL ----
 
 
+type ErrorMessage a
+    = Shown a
+    | Hidden a
+
+
+getErrorMessage : ErrorMessage a -> a
+getErrorMessage errorMessage =
+    case errorMessage of
+        Shown value ->
+            value
+
+        Hidden value ->
+            value
+
+
+hideErrorMessage : ErrorMessage a -> ErrorMessage a
+hideErrorMessage =
+    getErrorMessage >> Hidden
+
+
 type alias Model =
     { players : List String
-    , errorMessage : Maybe String
+    , errorMessage : ErrorMessage String
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { players = []
-      , errorMessage = Nothing
+      , errorMessage = Hidden ""
       }
     , Cmd.none
     )
@@ -86,16 +106,16 @@ update msg model =
 
             else
                 ( { model
-                    | errorMessage = Just ("Hay elementos repetidos: " ++ joinWithConjunction "y" repeatedPlayers)
+                    | errorMessage = Shown ("Hay elementos repetidos: " ++ joinWithConjunction "y" repeatedPlayers)
                   }
                 , Delay.after 3000 RemoveErrorMessage
                 )
 
         SetErrorMessage message ->
-            ( { model | errorMessage = Just message }, Cmd.none )
+            ( { model | errorMessage = Shown message }, Cmd.none )
 
         RemoveErrorMessage ->
-            ( { model | errorMessage = Nothing }, Cmd.none )
+            ( { model | errorMessage = hideErrorMessage model.errorMessage }, Cmd.none )
 
 
 joinWithConjunction : String -> List String -> String
@@ -183,21 +203,21 @@ view model =
                 , padding (rem 0.5)
                 , borderRadius (px 5)
                 , color (hex "#FFFFFF")
-                , maybeToVisibility model.errorMessage
+                , errorMessageToVisibility model.errorMessage
                 , transition [ Css.Transitions.opacity 800 ]
                 ]
             ]
-            [ text (Maybe.withDefault "" model.errorMessage) ]
+            [ text (getErrorMessage model.errorMessage) ]
         ]
 
 
-maybeToVisibility : Maybe a -> Style
-maybeToVisibility maybe =
+errorMessageToVisibility : ErrorMessage a -> Style
+errorMessageToVisibility maybe =
     case maybe of
-        Just _ ->
+        Shown _ ->
             opacity (num 1)
 
-        Nothing ->
+        Hidden _ ->
             opacity (num 0)
 
 
