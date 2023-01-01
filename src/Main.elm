@@ -101,15 +101,22 @@ update msg model =
                 repeatedPlayers =
                     getRepeatedElements validPlayers
             in
-            if List.isEmpty repeatedPlayers then
-                ( { model | players = validPlayers }, Cmd.none )
-
-            else
+            if not (List.isEmpty repeatedPlayers) then
                 ( { model
                     | errorMessage = Shown ("Hay elementos repetidos: " ++ joinWithConjunction "y" repeatedPlayers)
                   }
                 , Delay.after 3000 RemoveErrorMessage
                 )
+
+            else if List.length validPlayers < 7 then
+                ( { model
+                    | errorMessage = Shown "No hay suficientes jugadores. Se necesitan al menos 7"
+                  }
+                , Delay.after 3000 RemoveErrorMessage
+                )
+
+            else
+                ( { model | players = validPlayers }, Cmd.none )
 
         SetErrorMessage message ->
             ( { model | errorMessage = Shown message }, Cmd.none )
