@@ -38,14 +38,14 @@ hideErrorMessage =
 
 
 type alias Model =
-    { players : List String
+    { playerNames : List String
     , errorMessage : ErrorMessage String
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { players = []
+    ( { playerNames = []
       , errorMessage = Hidden ""
       }
     , Cmd.none
@@ -69,22 +69,22 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         AddPlayer ->
-            ( { model | players = model.players ++ [ "" ] }
+            ( { model | playerNames = model.playerNames ++ [ "" ] }
             , Cmd.none
             )
 
         DeletePlayer index ->
             ( { model
-                | players =
-                    model.players |> List.Extra.removeAt index
+                | playerNames =
+                    model.playerNames |> List.Extra.removeAt index
               }
             , Cmd.none
             )
 
         EditPlayerName index name ->
             ( { model
-                | players =
-                    model.players |> List.Extra.setAt index name
+                | playerNames =
+                    model.playerNames |> List.Extra.setAt index name
               }
             , Cmd.none
             )
@@ -93,7 +93,7 @@ update msg model =
             let
                 validPlayers : List String
                 validPlayers =
-                    model.players
+                    model.playerNames
                         |> List.map String.trim
                         |> List.filter (String.isEmpty >> not)
 
@@ -116,7 +116,7 @@ update msg model =
                 )
 
             else
-                ( { model | players = validPlayers }, Cmd.none )
+                ( { model | playerNames = validPlayers }, Cmd.none )
 
         SetErrorMessage message ->
             ( { model | errorMessage = Shown message }, Cmd.none )
@@ -194,7 +194,7 @@ view model =
             ]
             (List.indexedMap
                 editNameList
-                model.players
+                model.playerNames
                 ++ [ button [ onClick AddPlayer ] [ text "Agregar jugador" ]
                    , button [ onClick StartChoosingRoles ] [ text "Elegir Roles" ]
                    ]
